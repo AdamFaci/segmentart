@@ -223,6 +223,12 @@ such as `cffconvert` turn it into BibTeX.
 
 ---
 
+## Source
+
+https://github.com/AdamFaci/segmentart
+
+---
+
 ## License
 
 Source code is licensed under the **Apache License, Version 2.0** — see `LICENSE`.
