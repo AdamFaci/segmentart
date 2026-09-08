@@ -1,0 +1,24 @@
+# Convenience file for `pip install -r requirements.txt`.
+# pyproject.toml is the authoritative source; this installs the interface stack.
+#
+#   pip install -e ".[app]"          equivalent, and preferred
+#   pip install -e ".[app,cv,dev]"   with post-processing and the test tools
+
+# ── Business layer (hard dependencies) ─────────────────────────────────────────
+numpy>=1.24
+pillow>=10.0
+
+# ── Interface ──────────────────────────────────────────────────────────────────
+streamlit>=1.36
+streamlit-drawable-canvas>=0.9.3
+
+# ── Optional: mask post-processing and compressed COCO RLE ─────────────────────
+opencv-python-headless>=4.8
+pycocotools>=2.0
+
+# ── Optional: semantic grouping (phase 2) ──────────────────────────────────────
+open_clip_torch>=2.20
+
+# ── Optional: SAM 2 ────────────────────────────────────────────────────────────
+# pip install git+https://github.com/facebookresearch/segment-anything-2.git
+# Install torch and torchvision for your platform.

@@ -1,0 +1,30 @@
+SegmentART
+Copyright 2026 Adam Faci, Léa Maronet
+
+This product includes software developed at Huma-Num (HN Lab), CNRS.
+
+Licensing
+---------
+Source code is licensed under the Apache License, Version 2.0 (see LICENSE).
+Documentation (README.md, CONTRIBUTING.md, CHANGELOG.md and any prose in the
+docs/ directory) is licensed under the Creative Commons Attribution 4.0
+International license (see LICENSES/CC-BY-4.0.txt).
+
+Third-party components
+----------------------
+SegmentART depends on, but does not redistribute, the following projects.
+Each remains under its own license; install them from their own distributions.
+
+  Streamlit                    Apache License 2.0
+  streamlit-drawable-canvas    MIT License
+  NumPy                        BSD 3-Clause License
+  Pillow                       MIT-CMU License
+  OpenCV (opencv-python)       Apache License 2.0 (optional)
+  pycocotools                  BSD 2-Clause License (optional)
+  open_clip_torch              MIT License (optional)
+  transformers                 Apache License 2.0 (optional)
+  SAM 2 (segment-anything-2)   Apache License 2.0 (optional)
+
+Model weights are not distributed with this software. SAM 2 checkpoints and
+CLIP weights are downloaded by the user from their respective providers and
+are governed by those providers' terms.
