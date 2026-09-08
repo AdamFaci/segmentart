@@ -1,0 +1,77 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "@type": "SoftwareSourceCode",
+  "name": "SegmentART",
+  "description": "Assisted image annotation combining manual prompts (box, positive and negative points) with automatic segmentation by SAM 2, followed by semantic grouping and structured, Visual Genome style description. Designed to reduce the time and number of interactions required for dense annotation, with fine grained interaction telemetry for comparing annotation strategies.",
+  "version": "0.1.0",
+  "dateCreated": "2026-06-22",
+  "datePublished": "2026-09-07",
+  "license": "https://spdx.org/licenses/Apache-2.0",
+  "programmingLanguage": [
+    {
+      "@type": "ComputerLanguage",
+      "name": "Python",
+      "version": ">=3.11"
+    }
+  ],
+  "runtimePlatform": "Python 3.11",
+  "operatingSystem": ["Linux", "macOS", "Windows"],
+  "applicationCategory": "Image annotation",
+  "developmentStatus": "active",
+  "keywords": [
+    "image annotation",
+    "instance segmentation",
+    "SAM 2",
+    "interactive segmentation",
+    "scene graph",
+    "Visual Genome",
+    "digital humanities",
+    "cultural heritage"
+  ],
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Adam",
+      "familyName": "Faci"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Léa",
+      "familyName": "Maronet"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Adam",
+      "familyName": "Faci"
+    }
+  ],
+  "softwareRequirements": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "numpy",
+      "version": ">=1.24"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "pillow",
+      "version": ">=10.0"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "streamlit",
+      "version": ">=1.36",
+      "description": "Required for the user interface only; the backend layer does not depend on it."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "streamlit-drawable-canvas",
+      "version": ">=0.9.3",
+      "description": "Required for the annotation canvas."
+    }
+  ],
+  "readme": "README.md",
+  "issueTracker": "",
+  "codeRepository": ""
+}

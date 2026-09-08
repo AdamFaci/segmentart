@@ -1,0 +1,82 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "segmentart"
+version = "0.1.0"
+description = "Assisted image annotation with SAM 2 prompts, semantic grouping and structured description"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Adam Faci" },
+    { name = "Léa Maronet" },
+]
+maintainers = [
+    { name = "Adam Faci" },
+]
+keywords = [
+    "image annotation",
+    "instance segmentation",
+    "SAM 2",
+    "interactive segmentation",
+    "scene graph",
+    "digital humanities",
+    "cultural heritage",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# The business layer has only two hard dependencies. Everything heavy — torch, OpenCV,
+# CLIP, pycocotools, SAM 2 — is imported lazily or inside try/except, so installing this
+# package from another project does not pull in the interface stack.
+dependencies = [
+    "numpy>=1.24",
+    "pillow>=10.0",
+]
+
+[project.optional-dependencies]
+app = [
+    "streamlit>=1.36",
+    "streamlit-drawable-canvas>=0.9.3",
+]
+cv = [
+    "opencv-python-headless>=4.8",
+    "pycocotools>=2.0",
+]
+semantic = [
+    "open_clip_torch>=2.20",
+]
+dev = [
+    "pytest>=7.4",
+    "ruff>=0.5",
+]
+# SAM 2 is installed separately:
+#   pip install git+https://github.com/facebookresearch/segment-anything-2.git
+
+[tool.setuptools.packages.find]
+include = ["segmentart*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# E501: long lines are handled by line-length above.
+# E702: semicolon-separated statements are the existing house style.
+ignore = ["E501", "E702"]

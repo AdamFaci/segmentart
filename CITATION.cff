@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: "SegmentART: assisted image annotation with SAM 2 and semantic grouping"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: Faci
+    given-names: Adam
+  - family-names: Maronet
+    given-names: Léa
+abstract: >-
+  SegmentART is an image annotation tool that combines manual prompts (box,
+  positive and negative points) with automatic segmentation by SAM 2, then
+  groups the resulting objects semantically and describes them in a structured,
+  Visual Genome style format. It is designed to reduce the time and the number
+  of interactions required for dense annotation, and it records fine grained
+  interaction telemetry so that annotation strategies can be compared.
+keywords:
+  - image annotation
+  - instance segmentation
+  - SAM 2
+  - interactive segmentation
+  - scene graph
+  - digital humanities
+  - cultural heritage
+license: Apache-2.0
+version: 0.1.0
+date-released: "2026-09-07"
