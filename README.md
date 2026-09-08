@@ -236,11 +236,6 @@ Source code is licensed under the **Apache License, Version 2.0** — see `LICEN
 Documentation (this file, `CONTRIBUTING.md`, `CHANGELOG.md`) is licensed under
 **Creative Commons Attribution 4.0 International** — see `LICENSES/CC-BY-4.0.txt`.
 
-Creative Commons [recommends against](https://creativecommons.org/faq/) applying CC
-licenses to software, because they address neither patent grants nor source
-distribution. Apache 2.0 covers the code and carries the same attribution requirement,
-while CC BY covers the prose, which is what it was designed for.
-
 Third-party dependencies keep their own licenses and are not redistributed here — see
 `NOTICE`. Model weights (SAM 2, CLIP) are downloaded by the user from their providers and
 are governed by those providers' terms.
