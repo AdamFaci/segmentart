@@ -1,0 +1,57 @@
+# GitLab CI for SegmentART.
+#
+# The test suite deliberately needs neither a GPU, nor model weights, nor network
+# access at run time: it exercises the business layer only. Keep it that way.
+
+stages:
+  - lint
+  - test
+  - build
+
+default:
+  image: python:3.11-slim
+  cache:
+    key:
+      files:
+        - pyproject.toml
+    paths:
+      - .cache/pip
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+lint:
+  stage: lint
+  script:
+    - pip install --quiet ruff
+    - ruff check .
+
+test:
+  stage: test
+  parallel:
+    matrix:
+      - PYTHON_IMAGE: ["python:3.11-slim", "python:3.12-slim"]
+  image: $PYTHON_IMAGE
+  script:
+    - pip install --quiet -e ".[dev]"
+    - pytest -q
+
+# The business layer must import with NumPy and Pillow alone. This job fails if a
+# heavy dependency ever becomes mandatory.
+minimal-install:
+  stage: test
+  script:
+    - pip install --quiet -e .
+    - python -c "import segmentart.backend.masks, segmentart.backend.serialization"
+    - python -c "import streamlit" && exit 1 || echo "Streamlit correctly absent"
+
+build:
+  stage: build
+  script:
+    - pip install --quiet build twine
+    - python -m build
+    - twine check dist/*
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
