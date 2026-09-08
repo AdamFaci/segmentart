@@ -1,0 +1,79 @@
+# CI for SegmentART.
+#
+# The test suite deliberately needs neither a GPU, nor model weights, nor network
+# access at run time: it exercises the business layer only. Keep it that way.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - run: ruff check .
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
+  # The business layer must import with NumPy and Pillow alone. This job fails if a
+  # heavy dependency ever becomes mandatory.
+  minimal-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e .
+      - name: Backend imports without the interface stack
+        run: python -c "import segmentart.backend.masks, segmentart.backend.serialization"
+      - name: Streamlit must not have been pulled in
+        run: |
+          if python -c "import streamlit" 2>/dev/null; then
+            echo "Streamlit was installed by the base package; it must stay optional."
+            exit 1
+          fi
+          echo "Streamlit correctly absent."
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
