@@ -219,6 +219,14 @@ See `CONTRIBUTING.md`.
 
 If you use SegmentART in academic work, please cite it:
 
+in APA:
+
+`
+Faci, A., & Maronet, L. (2026). SegmentART: Assisted image annotation with SAM 2 and semantic grouping (Version 0.1.0) [Computer software]. https://github.com/AdamFaci/segmentart
+`
+
+or Bibtex:
+
 ```bibtex
 @software{faci_maronet_segmentart_2026,
   author  = {Faci, Adam and Maronet, L{\'e}a},
