@@ -217,9 +217,18 @@ See `CONTRIBUTING.md`.
 
 ## Citing
 
-If you use SegmentART in academic work, please cite it. `CITATION.cff` holds the
-machine-readable metadata; GitLab and GitHub render it as a citation block, and tools
-such as `cffconvert` turn it into BibTeX.
+If you use SegmentART in academic work, please cite it:
+
+```bibtex
+@software{faci_maronet_segmentart_2026,
+  author  = {Faci, Adam and Maronet, L{\'e}a},
+  title   = {{SegmentART}: assisted image annotation with {SAM~2} and semantic grouping},
+  year    = {2026},
+  version = {0.1.0},
+  license = {Apache-2.0},
+  url     = {https://github.com/AdamFaci/segmentart}
+}
+```
 
 ---
 
