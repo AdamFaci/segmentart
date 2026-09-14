@@ -15,6 +15,13 @@ backend, CVAT, Gradio) can sit on top of it.
 
 ---
 
+## Demo
+
+https://sharedocs.huma-num.fr/wl/?id=RzIjXYMeor3VCv1SzPxNelgREKjphksX&fmode=open
+
+
+---
+
 ## Contents
 
 - [Installation](#installation)
