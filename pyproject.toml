@@ -48,7 +48,7 @@ dependencies = [
 [project.optional-dependencies]
 app = [
     "streamlit>=1.36",
-    "streamlit-drawable-canvas>=0.9.3",
+    "streamlit-drawable-canvas>=0.9.3",  # 0.10+ dropped display_toolbar; handled by canvas_compat
 ]
 cv = [
     "opencv-python-headless>=4.8",

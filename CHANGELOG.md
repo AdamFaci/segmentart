@@ -4,6 +4,21 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [semantic versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Annotation crashed with `TypeError: st_canvas() got an unexpected keyword argument
+  'display_toolbar'` on streamlit-drawable-canvas 0.10 and later, where the keyword was
+  removed. The compatibility shim now introspects the installed signature and drops
+  keywords it does not accept, raising a clear error only when a keyword the annotation
+  view genuinely depends on has disappeared.
+- An incompatible Streamlit / canvas pair took the whole application down at start-up:
+  the component now fails at import with `StreamlitAPIException` rather than
+  `ImportError`, which the shim did not catch. The canvas is reported as unavailable
+  instead, and phase 2 remains usable.
+- The `image_to_url` patch is no longer applied to canvas 0.10+, which never calls it.
+
 ## [0.1.0] — 2026-09-07
 
 First public release.
