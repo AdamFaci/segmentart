@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- The interface-layer tests failed in CI instead of skipping, because the test job
+  installs only the `dev` extra and `viz` imports Streamlit at module level. They are now
+  guarded, and `dev` pulls in Streamlit so that they actually run rather than being
+  quietly skipped everywhere.
 - **Annotation was unusable with streamlit-drawable-canvas 0.10 and later.** The 0.10
   rewrite moved to Fabric.js v6, which emits capitalised object types (`Rect` instead of
   `rect`). Parsing therefore found no box: "Validate the box" stayed disabled, automatic

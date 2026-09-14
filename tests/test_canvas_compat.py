@@ -8,9 +8,21 @@ a recent canvas raises `TypeError: st_canvas() got an unexpected keyword argumen
 tests pin the behaviour of the shim against both signatures without importing Streamlit.
 """
 
+import importlib.util
+
 import pytest
 
 from segmentart.frontend import canvas_compat as cc
+
+# Four tests below reach into the interface layer: `viz` imports Streamlit at module
+# level, and two tests patch a Streamlit internal. The suite must still pass in a bare
+# environment (see CONTRIBUTING), so they are skipped rather than failing there. The CI
+# `test` job installs Streamlit precisely so that they do run; `minimal-install` is what
+# guarantees the backend works without it.
+requires_streamlit = pytest.mark.skipif(
+    importlib.util.find_spec("streamlit") is None,
+    reason="needs Streamlit (the interface layer); install with pip install -e '.[dev]'",
+)
 
 # What annotate_view actually passes, as of this version.
 CALL_KWARGS = dict(
@@ -107,6 +119,7 @@ def test_absent_canvas_raises_with_install_instructions(monkeypatch):
         cc.st_canvas(**CALL_KWARGS)
 
 
+@requires_streamlit
 def test_image_to_url_patch_is_skipped_on_rewritten_versions(monkeypatch):
     """The 0.10+ rewrite never calls image_to_url; we must not shadow the internal."""
     import streamlit.elements.image as img_mod
@@ -117,6 +130,7 @@ def test_image_to_url_patch_is_skipped_on_rewritten_versions(monkeypatch):
     assert img_mod.image_to_url == "sentinel"
 
 
+@requires_streamlit
 def test_image_to_url_patch_applies_to_old_versions(monkeypatch):
     import streamlit.elements.image as img_mod
 
@@ -128,6 +142,7 @@ def test_image_to_url_patch_applies_to_old_versions(monkeypatch):
 
 # ── Fabric.js v5 vs v6 object types ────────────────────────────────────────────────────
 
+@requires_streamlit
 def test_fabric_types_are_matched_case_insensitively():
     """v6 (canvas 0.10+) capitalises type names; parsing must survive both spellings."""
     from segmentart.frontend import viz
@@ -140,6 +155,7 @@ def test_fabric_types_are_matched_case_insensitively():
     assert box_v5 == box_v6 == (20, 10, 40, 30)
 
 
+@requires_streamlit
 def test_fabric_circle_types_are_matched_case_insensitively():
     from segmentart.config import POS_FILL
     from segmentart.frontend import viz

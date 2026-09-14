@@ -60,6 +60,9 @@ semantic = [
 dev = [
     "pytest>=7.4",
     "ruff>=0.5",
+    # The interface-layer tests need Streamlit importable. Not the canvas widget: the
+    # tests substitute it. `minimal-install` in CI is what proves the backend runs bare.
+    "streamlit>=1.36",
 ]
 # SAM 2 is installed separately:
 #   pip install git+https://github.com/facebookresearch/segment-anything-2.git
