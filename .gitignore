@@ -17,6 +17,7 @@ checkpoints/
 *.pt
 *.pth
 *.safetensors
+sam2*.yaml
 
 data/
 Images/
