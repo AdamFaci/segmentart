@@ -15,14 +15,22 @@ from segmentart.backend import io_store, masks, sam2_engine, serialization
 from segmentart.backend.models import bump_epoch
 from segmentart.backend.telemetry import PIPELINES
 from segmentart.frontend import resources, state, viz
-from segmentart.frontend.canvas_compat import CANVAS_AVAILABLE, st_canvas
+from segmentart.frontend.canvas_compat import (
+    CANVAS_AVAILABLE,
+    CANVAS_IMPORT_ERROR,
+    st_canvas,
+)
 
 
 def render_annotation_phase():
     if not CANVAS_AVAILABLE:
-        st.error("The **streamlit-drawable-canvas** component is required.\n\n"
-                 "Install it, then restart:\n\n"
-                 "```\npip install streamlit-drawable-canvas\n```")
+        reason = str(CANVAS_IMPORT_ERROR) if CANVAS_IMPORT_ERROR else (
+            "The component is not installed.\n\n"
+            "```\npip install 'streamlit-drawable-canvas>=0.9.3,<0.10'\n```"
+        )
+        st.error(f"The annotation canvas is unavailable.\n\n{reason}")
+        st.info("Phase 2 (grouping and description) still works: switch step in the "
+                "sidebar.")
         st.stop()
 
     _apply_round_pipeline()
@@ -607,7 +615,7 @@ def _main_area():
     bg = viz.get_background(arr, anns, ann, dw, dh)
 
     if ann is None:
-        st.image(bg, use_container_width=False)
+        st.image(bg)
     else:
         _canvas(ann, mode, bg, dw, dh, scale, arr.shape[:2])
 

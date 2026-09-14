@@ -67,7 +67,7 @@
     {
       "@type": "SoftwareApplication",
       "name": "streamlit-drawable-canvas",
-      "version": ">=0.9.3",
+      "version": ">=0.9.3,<0.10",
       "description": "Required for the annotation canvas."
     }
   ],

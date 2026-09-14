@@ -10,7 +10,7 @@ pillow>=10.0
 
 # ── Interface ──────────────────────────────────────────────────────────────────
 streamlit>=1.36
-streamlit-drawable-canvas>=0.9.3
+streamlit-drawable-canvas>=0.9.3,<0.10
 
 # ── Optional: mask post-processing and compressed COCO RLE ─────────────────────
 opencv-python-headless>=4.8

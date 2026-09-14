@@ -128,6 +128,16 @@ def _fill_is_pos(fill):
     return False
 
 
+def _fabric_type(obj):
+    """Object type, lower-cased.
+
+    Fabric.js v5 emits lower-case type names ("rect", "circle", "path"); v6, used by
+    streamlit-drawable-canvas 0.10 and later, emits the capitalised class name ("Rect",
+    "Circle", "Path"). Comparing case-insensitively keeps the parser working with both.
+    """
+    return str(obj.get("type", "")).lower()
+
+
 def parse_polygon_objects(objects, scale, drop_last=True, close_dist=0):
     """Canvas 'path' objects (polygon mode, manual P0) → (polygons, box).
 
@@ -138,7 +148,7 @@ def parse_polygon_objects(objects, scale, drop_last=True, close_dist=0):
     The full-resolution mask is built by the caller."""
     polys = []
     for o in objects:
-        if o.get("type") != "path":
+        if _fabric_type(o) != "path":
             continue
         pts = []
         for cmd in o.get("path", []):
@@ -170,7 +180,7 @@ def parse_canvas_objects(objects, scale):
     box = None
     pos, neg = [], []
     for o in objects:
-        t = o.get("type")
+        t = _fabric_type(o)
         if t == "rect":
             left = o.get("left", 0)
             top = o.get("top", 0)

@@ -124,3 +124,42 @@ def test_image_to_url_patch_applies_to_old_versions(monkeypatch):
     monkeypatch.setattr(img_mod, "image_to_url", "sentinel", raising=False)
     cc._patch_image_to_url()
     assert img_mod.image_to_url is cc._shim_image_to_url
+
+
+# ── Fabric.js v5 vs v6 object types ────────────────────────────────────────────────────
+
+def test_fabric_types_are_matched_case_insensitively():
+    """v6 (canvas 0.10+) capitalises type names; parsing must survive both spellings."""
+    from segmentart.frontend import viz
+
+    v5 = [{"type": "rect", "left": 20, "top": 10, "width": 40, "height": 30}]
+    v6 = [{"type": "Rect", "left": 20, "top": 10, "width": 40, "height": 30}]
+
+    box_v5, _, _ = viz.parse_canvas_objects(v5, scale=1.0)
+    box_v6, _, _ = viz.parse_canvas_objects(v6, scale=1.0)
+    assert box_v5 == box_v6 == (20, 10, 40, 30)
+
+
+def test_fabric_circle_types_are_matched_case_insensitively():
+    from segmentart.config import POS_FILL
+    from segmentart.frontend import viz
+
+    for spelling in ("circle", "Circle"):
+        objs = [{"type": spelling, "left": 10, "top": 10, "radius": 5, "fill": POS_FILL}]
+        _, pos, neg = viz.parse_canvas_objects(objs, scale=1.0)
+        assert len(pos) == 1, spelling
+        assert neg == []
+
+
+def test_supported_versions_are_accepted():
+    for ver in ((0, 9), (0, 9, ), None):
+        assert cc.unsupported_version_error(ver) is None
+
+
+def test_rewritten_versions_are_refused_with_the_pin():
+    """0.10+ must fail loudly rather than leave the validate button dead."""
+    for ver in ((0, 10), (0, 12), (0, 13), (1, 0)):
+        err = cc.unsupported_version_error(ver)
+        assert isinstance(err, RuntimeError), ver
+        assert "<0.10" in str(err)
+        assert f"{ver[0]}.{ver[1]}" in str(err)

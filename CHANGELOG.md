@@ -8,16 +8,23 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
-- Annotation crashed with `TypeError: st_canvas() got an unexpected keyword argument
-  'display_toolbar'` on streamlit-drawable-canvas 0.10 and later, where the keyword was
-  removed. The compatibility shim now introspects the installed signature and drops
-  keywords it does not accept, raising a clear error only when a keyword the annotation
-  view genuinely depends on has disappeared.
+- **Annotation was unusable with streamlit-drawable-canvas 0.10 and later.** The 0.10
+  rewrite moved to Fabric.js v6, which emits capitalised object types (`Rect` instead of
+  `rect`). Parsing therefore found no box: "Validate the box" stayed disabled, automatic
+  validation never fired, and nothing said why. It also removed `display_toolbar`
+  (`TypeError` as soon as the canvas was drawn) and the `transform` drawing mode the
+  eraser relies on. The supported range is now pinned to `>=0.9.3,<0.10`, and an
+  unsupported version is refused at import with a message naming the pin, instead of
+  producing an interface whose buttons quietly do nothing.
 - An incompatible Streamlit / canvas pair took the whole application down at start-up:
-  the component now fails at import with `StreamlitAPIException` rather than
-  `ImportError`, which the shim did not catch. The canvas is reported as unavailable
-  instead, and phase 2 remains usable.
+  the component fails at import with `StreamlitAPIException` rather than `ImportError`,
+  which the shim did not catch. The canvas is now reported as unavailable, the error
+  explains why, and phase 2 remains usable.
+- Canvas object types are matched case-insensitively, so parsing is not what breaks first
+  when the Fabric.js major version changes.
 - The `image_to_url` patch is no longer applied to canvas 0.10+, which never calls it.
+- Dropped the deprecated `use_container_width` argument from `st.image`; its former
+  behaviour is the current default.
 
 ## [0.1.0] — 2026-09-07
 

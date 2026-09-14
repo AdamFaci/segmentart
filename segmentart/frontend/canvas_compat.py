@@ -108,8 +108,17 @@ def _patch_image_to_url():
 
 _patch_image_to_url()
 
-# The component must be imported AFTER the patch is applied.
-#
+# Canvas 0.10 introduced a rewrite this application has not been ported to. Three known
+# incompatibilities, none of which fails loudly on its own:
+#   - Fabric.js v6 emits capitalised object types ("Rect" instead of "rect"), so parsing
+#     silently yields no box and the "Validate the box" button stays disabled forever;
+#   - drawing_mode="transform" was renamed "edit" in 0.10 and removed in 0.12, which the
+#     eraser mode relies on;
+#   - the toolbar is no longer controlled by display_toolbar.
+# Refusing the version outright beats shipping an interface whose buttons quietly do
+# nothing. Raise the ceiling once the port is done and tested in a browser.
+CANVAS_MAX_EXCLUSIVE = (0, 10)
+
 # Catch every exception, not just ImportError: an incompatible Streamlit/canvas pair
 # fails at import time with a StreamlitAPIException (the 0.10+ component registration
 # rejecting the host Streamlit). Letting that escape takes the whole application down at
@@ -122,6 +131,26 @@ except Exception as exc:                                  # noqa: BLE001
     _st_canvas = None
     CANVAS_AVAILABLE = False
     CANVAS_IMPORT_ERROR = exc
+
+def unsupported_version_error(ver):
+    """The error for canvas version `ver`, or None when the version is usable."""
+    if ver is None or ver < CANVAS_MAX_EXCLUSIVE:
+        return None
+    ceiling = f"{CANVAS_MAX_EXCLUSIVE[0]}.{CANVAS_MAX_EXCLUSIVE[1]}"
+    return RuntimeError(
+        f"streamlit-drawable-canvas {ver[0]}.{ver[1]} is not supported yet: the {ceiling} "
+        "rewrite changed the canvas object format and removed the drawing modes this "
+        "application uses. Install a supported version:\n"
+        f"    pip install 'streamlit-drawable-canvas>=0.9.3,<{ceiling}'"
+    )
+
+
+if CANVAS_AVAILABLE:
+    _version_error = unsupported_version_error(_canvas_version())
+    if _version_error is not None:
+        _st_canvas = None
+        CANVAS_AVAILABLE = False
+        CANVAS_IMPORT_ERROR = _version_error
 
 
 def _supported_kwargs(func):
